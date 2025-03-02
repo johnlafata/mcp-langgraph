@@ -11,9 +11,6 @@ from mcp.server.fastmcp import FastMCP
 import requests
 from typing import List, Any
 
-from pydantic_trello_model import TrelloBoard
-import json
-
 mcp = FastMCP("Trello")
 # reference https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/
 

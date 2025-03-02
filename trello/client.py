@@ -21,28 +21,12 @@ model = ChatOpenAI(model="gpt-4o")
 async def main():
     async with MultiServerMCPClient() as client:
         await client.connect_to_server(
-            "math",
-            command="python",
-            # Make sure to update to the full absolute path to your math_server.py file
-            args=["math_server.py"],
-        )
-        await client.connect_to_server(
-            "weather",
-            command="python",
-            # Make sure to update to the full absolute path to your weather_server.py file
-            args=["weather_server.py"],
-        )
-        await client.connect_to_server(
             "trello",
             command="python",
             # Make sure to update to the full absolute path to your weather_server.py file
             args=["trello-server.py"],
         )
         agent = create_react_agent(model, client.get_tools())
-        # math_response = await agent.ainvoke({"messages": "what's (3 + 5) x 12?"})
-        # print(math_response)
-        # weather_response = await agent.ainvoke({"messages": "what is the weather in nyc?"})
-        # print(weather_response)
         key=os.getenv('TRELLO_API_KEY')
         logging.debug(f'key: {key}')
         token=os.getenv('TRELLO_ACCOUNT_TOKEN')
