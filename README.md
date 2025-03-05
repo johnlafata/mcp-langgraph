@@ -17,6 +17,12 @@ This example parameterizes the tool specification so that any MCP server might b
 
 ... more to come...
 
+## more references: 
+https://github.com/langchain-ai/langchain-mcp-adapters
+
+## investigate this to see if this is better than the above
+https://github.com/modelcontextprotocol/python-sdk 
+
 
 
 
