@@ -20,6 +20,15 @@ This example parameterizes the tool specification so that any MCP server might b
 ## more references: 
 https://github.com/langchain-ai/langchain-mcp-adapters
 
+## Opensource MCP servers
+- A catalogue of servers
+- https://glama.ai/mcp/servers?attributes=category%3Aversion-control
+- Another catalog
+- https://github.com/modelcontextprotocol/servers 
+- Playground
+- https://glama.ai/playground 
+
+
 ## investigate this to see if this is better than the above
 https://github.com/modelcontextprotocol/python-sdk 
 
