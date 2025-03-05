@@ -1,3 +1,5 @@
+# from fastapi import FastAPI
+
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -60,7 +62,7 @@ def get_cards_from_a_list_on_a_board(key: str, token: str, board_name: str, list
     board_response=get_trello_boards(key, token)
     board_id=None;
     for board in board_response:
-        if board.get("name")==board_name:
+        if board.get("name").lower()==board_name.lower():
             board_id=board.get("id")
             break
     if board_id is None:
@@ -69,7 +71,7 @@ def get_cards_from_a_list_on_a_board(key: str, token: str, board_name: str, list
     list_id=None
     # get the id of the list on that board
     for list in list_response:
-        if list.get("name")==list_name:
+        if list.get("name").lower()==list_name.lower():
             list_id=list.get("id")
             break
     if list_id is None:

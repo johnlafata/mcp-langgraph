@@ -20,6 +20,7 @@ class Agent:
         graph.add_edge("action", "llm")
         graph.set_entry_point("llm")
         self.graph = graph.compile()
+        print (tools)
         self.tools = {t.name: t for t in tools}
         self.model = model.bind_tools(tools)
 

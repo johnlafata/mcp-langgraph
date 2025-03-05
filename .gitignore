@@ -1,0 +1,14 @@
+__pycache__
+.vscode
+./venv
+langgraph/.env
+langgraph/__pycache__
+trello-mcp/.env
+trello-mcp/__pycache__
+trello-mcp-langgraph/.env
+trello-mcp-langgraph/__pycache__
+trello-mcp-generalized-langgraph/.env
+trello-mcp-generalized-langgraph/__pycache__
+.DS_Store
+copilot
+README-DEPLOY.md

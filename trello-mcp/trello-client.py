@@ -23,7 +23,7 @@ async def main():
         await client.connect_to_server(
             "trello",
             command="python",
-            # Make sure to update to the full absolute path to your weather_server.py file
+            # Make sure to update to the full absolute path to your trello-server.py file
             args=["trello-server.py"],
         )
         agent = create_react_agent(model, client.get_tools())
@@ -31,7 +31,13 @@ async def main():
         logging.debug(f'key: {key}')
         token=os.getenv('TRELLO_ACCOUNT_TOKEN')
         logging.debug(f'token: {token}')
-        trello_response = await agent.ainvoke({"messages": f"can you list the trello boards using this {key} and {token}"})
+        trello_response = await agent.ainvoke({"messages": f"can you list the trello boards using this key {key} and token {token}"})
+        # trello_response = await agent.ainvoke({"messages": f"can you list the trello boards using this {key} and {token}"})
+        print("----")
+        messages=trello_response.get("messages")
+        for message in messages:
+            print("----")
+            print(message)        
         response_object=trello_response.get("messages")[-1].content
         print(response_object)
         trello_response = await agent.ainvoke({"messages": f"Now show me the list names on the board using the id of the board with the name 'garage' using same this {key} and {token}"})
