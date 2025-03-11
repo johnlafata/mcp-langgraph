@@ -56,13 +56,10 @@ class MCPClient:
         tools = response.tools
         print("\nConnected to server with tools:", [tool.name for tool in tools])
 
-    async def process_query(self, query: str) -> str:
+    async def process_query(self, query: str) -> list:
         """Process a query using model and available tools"""
         messages = [
-            {
-                "role": "user",
-                "content": query
-            }
+            HumanMessage(content=query)
         ]
 
         response = await self.session.list_tools()
@@ -75,16 +72,16 @@ class MCPClient:
         model_with_tools=self.model.bind_tools(available_tools)
 
         response=model_with_tools.invoke(messages)
+        messages.append(AIMessage(content=response.content))
 
         # print(f"Response: {response}")
         # print (type(response.content))
 
         if isinstance(response.content, str) and response.content != '':
-            return response.content
+            return messages
 
         final_text=[]
         assistant_message_content=[]
-        tool_results=[]
         for t in response.tool_calls:
             tool_name=t['name']
             tool_args=t['args']
@@ -98,59 +95,26 @@ class MCPClient:
                 # result = "suggested tool not bound"  # instruct LLM to retry if bad
                 # try to evaluate without tools
                 response=self.model.invoke(messages)
-                # print("after attept with not tools")
-                # print(f"Response: {response}")
+                print("after attempt with no tools")
+                print(f"Response: {response}")
 
                 final_text.append(response.content)
             else:
-                assistant_message_content.append(t)
-                messages.append({
-                    "role": "assistant",
-                    "content": assistant_message_content
-                })
+                # assistant_message_content.append(t)
+                messages.append(
+                    AIMessage(content=assistant_message_content))
 
-                # # Execute tool call
-                # result = available_tools[t['name']].invoke(t['args'])
                 result = await self.session.call_tool(tool_name, tool_args)
-                # tool_results.append(ToolMessage(tool_call_id=t['id'], name=tool_name, content=str(result)))
                 for content in result.content:
                     if content.type == 'text':
+                        # print ("after tool call: "+content.text)
                         final_text.append(content.text)
-                        assistant_message_content.append(content)
-                    elif content.type == 'tool_use':
-                        tool_name = content.name
-                        tool_args = content.input
 
-                        # Execute tool call
-                        result = await self.session.call_tool(tool_name, tool_args)
-                        tool_results.append({"call": tool_name, "result": result})
-                        final_text.append(f"[Calling tool {tool_name} with args {tool_args}]")
+                messages.append(ToolMessage(content=str(final_text), name=tool_name, tool_call_id=t['id']))     
+                response=model_with_tools.invoke(f"Here is the result of the call to {tool_name}: {messages[-1].content}")
+                messages.append(AIMessage(content=response.content))
 
-                        assistant_message_content.append(content)
-                        messages.append({
-                            "role": "assistant",
-                            "content": assistant_message_content
-                        })
-                        messages.append({
-                            "role": "user",
-                            "content": [
-                                {
-                                    "type": "tool_result",
-                                    "tool_use_id": content.id,
-                                    "content": result.content
-                                }
-                            ]
-                        })
-
-                        response=model_with_tools.invoke(messages)
-                        # print(response.content[0].text)
-                        final_text.append(response.content[0].text)
-            
-                # print(f"Result.content: {result.content}")
-                # # print(f"Result.content: {result.content}")
-                # final_text.append(str(result.content))
-        # print(messages[-1])
-        return "\n".join(final_text)
+        return messages
 
         # print("**************")
         # print (response)

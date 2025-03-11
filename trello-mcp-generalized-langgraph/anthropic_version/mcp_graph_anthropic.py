@@ -9,15 +9,15 @@ from langgraph.graph import START, StateGraph, END
 from langgraph.prebuilt import tools_condition
 
 from state import AgentState
-from mcp_graph_node import MCPGraphNode
+from mcp_graph_node_anthropic import MCPGraphNode
 
 from langchain_openai import ChatOpenAI
 from langchain_ollama import ChatOllama
 from langchain_anthropic import ChatAnthropic
 
 # Works with any tool capable LLM
-# llm = ChatAnthropic(model="claude-3-5-sonnet-20241022")
-llm = ChatOpenAI(model="gpt-4o")
+llm = ChatAnthropic(model="claude-3-5-sonnet-20241022")
+# llm = ChatOpenAI(model="gpt-4o")
 # llm = ChatOllama(model="llama3.2:latest")
 
 prompt = """You are a smart research assistant. Use the search engine to look up information. \
@@ -43,10 +43,10 @@ def execute_graph_node_query(state: AgentState):
     query=messages[-1].content
     result=trello_graph_node.process_request(query)
     # print ("in execute_node_graph, result=",result)
-    # result_message=AIMessage(content=result)
+    result_message=AIMessage(content=result)
     # print ("in execute_node_graph, result_message=",result_message)
-    # new_messages=[result_message]    
-    return {"messages": state["messages"] + result}     
+    new_messages=[result_message]    
+    return {"messages": state["messages"] + new_messages}     
 
 async def amain() -> None:
 
@@ -58,8 +58,6 @@ async def amain() -> None:
     initial_input = [HumanMessage(content=f"can you list the trello boards using this key {key} and token {token}")]
     response=await react_graph.ainvoke({"messages": initial_input})
 
-    # print ("1st query response:",response)
-
     last_message=response.get("messages")[-1]
     print(last_message.content)
 
@@ -67,7 +65,6 @@ async def amain() -> None:
     initial_input = [HumanMessage(content=f"Who was the sixth president of the United States?")]
 
     response=await react_graph.ainvoke({"messages": initial_input})
-    # print ("2nd query response:",response)
     last_message=response.get("messages")[-1]
     print(last_message.content)
 

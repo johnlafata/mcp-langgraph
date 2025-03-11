@@ -24,6 +24,8 @@ modified mcp client based on:
     pip install -U openai
     pip install -U langchain_community
     pip install -U mcp
+    pip install -U langgraph
+    pip install -U python-dotenv
     ```
 
     Depending on the llm you want to use, you can install the following:

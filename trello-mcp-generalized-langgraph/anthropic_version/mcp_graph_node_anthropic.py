@@ -1,8 +1,8 @@
 from state import AgentState
 import asyncio
 
-from mcp_client import MCPClient
-# from mcp_client_anthropic_only import MCPClient
+# from mcp_client import MCPClient
+from mcp_client_anthropic_only import MCPClient
 
 class MCPGraphNode:
     def  __init__(self, model, server="trello-server.py"):
@@ -15,9 +15,9 @@ class MCPGraphNode:
 
     async def aprocess_request(self, query):
         await self.client.connect_to_server(self.server)
-        response_messages=await self.client.process_query(query)
+        response=await self.client.process_query(query)
         await self.client.cleanup()
-        return response_messages
+        return response
 
     async def destroy(self):
         await self.client.cleanup()

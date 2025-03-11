@@ -9,6 +9,8 @@ trello-mcp-langgraph/.env
 trello-mcp-langgraph/__pycache__
 trello-mcp-generalized-langgraph/.env
 trello-mcp-generalized-langgraph/__pycache__
+trello-mcp-generalized-langgraph/anthropic-version/.env
+trello-mcp-generalized-langgraph/anthropic-version/__pycache__
 .DS_Store
 copilot
 README-DEPLOY.md
