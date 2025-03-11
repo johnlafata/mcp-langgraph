@@ -12,9 +12,6 @@ from langchain_mcp_adapters.client import MultiServerMCPClient
 
 from mcp.client.stdio import stdio_client
 
-# needed?   
-# from anthropic import Anthropic
-
 from langchain_core.prompts import ChatPromptTemplate
 
 from dotenv import load_dotenv

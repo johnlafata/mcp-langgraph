@@ -16,8 +16,8 @@ from langchain_ollama import ChatOllama
 from langchain_anthropic import ChatAnthropic
 
 # Works with any tool capable LLM
-# llm = ChatAnthropic(model="claude-3-5-sonnet-20241022")
-llm = ChatOpenAI(model="gpt-4o")
+llm = ChatAnthropic(model="claude-3-5-sonnet-20241022")
+# llm = ChatOpenAI(model="gpt-4o")
 # llm = ChatOllama(model="llama3.2:latest")
 
 prompt = """You are a smart research assistant. Use the search engine to look up information. \
